@@ -6,7 +6,7 @@ export default createStore({
     apiKey: "AIzaSyBnwVB6wKC1WTHbckBRr7dCYbKfMU5VX2M",
     books: [],
     isLogin: JSON.parse(localStorage.getItem("token")) === true || false,
-    searchQuery: localStorage.getItem("searchValue"),
+    searchQuery: localStorage.getItem("searchValue").trim(),
     ucerInfo: JSON.parse(localStorage.getItem("ucerInfo")),
     isLoading: false,
     isError: false,
@@ -37,7 +37,7 @@ export default createStore({
     // Qidiruv so'rovini o'zgartirish
     setSearchQuery(state, value) {
       localStorage.setItem("searchValue", value);
-      state.searchQuery = value;
+      state.searchQuery = value.trim();
     },
 
     // Foydalanuvchi ma'lumotlarini o'zgartirish
