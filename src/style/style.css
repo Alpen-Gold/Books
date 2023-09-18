@@ -1,0 +1,178 @@
+html {
+  scroll-behavior: smooth;
+}
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif !important;
+}
+* {
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+}
+
+.container {
+  width: 1380px;
+  margin: 0 auto;
+}
+
+.all-button {
+  cursor: pointer;
+  padding: 7px 20px;
+  border-radius: 7px;
+  background-color: #fa7c54;
+  font-weight: 600;
+  color: white;
+  font-size: 15px;
+  border: 2px solid #fa7c54;
+  transition: 0.3s;
+
+  &:hover {
+    background-color: white;
+    color: #fa7c54 !important;
+    border: 2px solid #fa7c54;
+    transition: 0.3s;
+  }
+}
+.all-button a {
+  color: white;
+}
+
+.all-button:hover a {
+  color: #fa7c54;
+  transition: 0.3s;
+}
+.d-button {
+  background-color: #fa7b5490 !important;
+  border: 2px solid #fa7b541a !important;
+  color: white !important;
+  cursor: no-drop;
+}
+
+.loader {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: inline-block;
+  border-top: 2px solid black;
+  border-right: 2px solid transparent;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+}
+.loader::after {
+  content: "";
+  box-sizing: border-box;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border-left: 2px solid black;
+  border-bottom: 2px solid transparent;
+  animation: rotation 0.5s linear infinite reverse;
+}
+
+.booksLoader {
+  width: 108px;
+  height: 16px;
+  background: radial-gradient(
+      circle 8px at 8px center,
+      #fa7c54 100%,
+      transparent 0
+    ),
+    radial-gradient(circle 8px at 8px center, #fa7c54 100%, transparent 0);
+  background-size: 16px 16px;
+  background-repeat: no-repeat;
+  position: relative;
+  animation: ballX 1s linear infinite;
+}
+.booksLoader:before {
+  content: "";
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fa7c54;
+  inset: 0;
+  margin: auto;
+  animation: moveX 1s cubic-bezier(0.5, 300, 0.5, -300) infinite;
+}
+@keyframes ballX {
+  0%,
+  25%,
+  50%,
+  75%,
+  100% {
+    background-position: 25% 0, 75% 0;
+  }
+  40% {
+    background-position: 25% 0, 85% 0;
+  }
+  90% {
+    background-position: 15% 0, 75% 0;
+  }
+}
+@keyframes moveX {
+  100% {
+    transform: translate(0.15px);
+  }
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@media only screen and (max-width: 1440px) {
+  .container {
+    width: 1140px;
+    margin: 0 auto;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .container {
+    width: 600px !important;
+    margin: 0 auto !important;
+    padding: 0 15px !important;
+  }
+}
+
+@media only screen and (max-width: 1158px) and (min-width: 800px) {
+  .container {
+    width: 900px !important;
+    margin: 0 auto !important;
+    padding: 0 15px !important;
+  }
+}
+
+@media only screen and (max-width: 950px) and (min-width: 600px) {
+  .container {
+    width: 750px !important;
+    margin: 0 auto !important;
+    padding: 0 15px !important;
+  }
+}
+
+@media only screen and (max-width: 780px) and (min-width: 600px) {
+  .container {
+    width: 550px !important;
+    margin: 0 auto !important;
+    padding: 0 15px !important;
+  }
+}
+
+@media only screen and (max-width: 600px) and (min-width: 300px) {
+  .container {
+    width: 400px !important;
+    padding: 0 15px !important;
+  }
+}
