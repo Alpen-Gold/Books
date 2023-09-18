@@ -65,6 +65,7 @@ function inputHandle(value) {
 
 function search(e) {
   e.preventDefault();
+  hookStore.commit("setCurrentPage");
   hookStore.dispatch("fetchBooks");
 }
 </script>

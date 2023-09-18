@@ -54,21 +54,21 @@
         </div>
 
         <div class="box-button-books">
-          <button class="all-button">
-            <a :href="book?.volumeInfo?.previewLink" target="_blank"
-              ><i class="fa-solid fa-eye"></i
-            ></a>
-          </button>
+          <a :href="book?.volumeInfo?.previewLink" target="_blank">
+            <button class="all-button">
+              <i class="fa-solid fa-eye"></i>
+            </button>
+          </a>
 
-          <button class="all-button">
-            <a :href="book?.volumeInfo?.infoLink" target="_blank"
-              ><i class="fa-solid fa-info"></i
-            ></a>
-          </button>
+          <a :href="book?.volumeInfo?.infoLink" target="_blank">
+            <button class="all-button">
+              <i class="fa-solid fa-info"></i>
+            </button>
+          </a>
 
-          <button class="all-button">
-            <a :href="book?.saleInfo?.buyLink" target="_blank">Sotib olish</a>
-          </button>
+          <a :href="book?.saleInfo?.buyLink" target="_blank">
+            <button class="all-button">Sotib olish</button>
+          </a>
         </div>
       </div>
     </div>

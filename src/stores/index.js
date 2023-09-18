@@ -67,6 +67,10 @@ export default createStore({
       }
     },
 
+    setCurrentPage(state) {
+      state.currentPage = 1;
+    },
+
     // Kitoblar ko'rinishini o'zgartirish
     setTypeViewBook(state, value) {
       state.typeViewBook = value;
@@ -93,14 +97,15 @@ export default createStore({
                   ? String(searchQuery)
                   : "programming",
 
-              startIndex: (currentPage - 1) * 20,
-              maxResults: 10,
+              startIndex: currentPage * 20,
+              maxResults: 15,
               key: apiKey,
             },
           }
         );
 
         context.commit("setBooks", response.data.items);
+        console.log(response.data.totalItems);
         context.state.totalPage = Math.ceil(response.data.totalItems - 1 / 30);
 
         if (totalPage < 1) context.state.isNotValue = true;
