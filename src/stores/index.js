@@ -86,16 +86,13 @@ export default createStore({
     async fetchBooks(context) {
       context.commit("setLoading", true);
       const { searchQuery, currentPage, apiKey, totalPage } = context.state;
-
+      console.log(searchQuery);
       try {
         let response = await axios.get(
           "https://www.googleapis.com/books/v1/volumes",
           {
             params: {
-              q:
-                String(searchQuery) !== ""
-                  ? String(searchQuery)
-                  : "programming",
+              q: searchQuery ? String(searchQuery) : "programming",
 
               startIndex: currentPage * 20,
               maxResults: 15,
