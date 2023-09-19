@@ -6,7 +6,7 @@ export default createStore({
     apiKey: "AIzaSyBnwVB6wKC1WTHbckBRr7dCYbKfMU5VX2M",
     books: [],
     isLogin: JSON.parse(localStorage.getItem("token")) === true || false,
-    searchQuery: localStorage.getItem("searchValue").trim(),
+    searchQuery: localStorage.getItem("searchValue"),
     ucerInfo: JSON.parse(localStorage.getItem("ucerInfo")),
     isLoading: false,
     isError: false,
