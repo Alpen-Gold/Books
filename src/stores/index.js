@@ -31,6 +31,8 @@ export default createStore({
     // Kirishni o'rnatish
     setIsLogin(state, isLogin) {
       localStorage.setItem("token", JSON.stringify(isLogin));
+      localStorage.setItem("searchValue", "");
+      state.searchQuery = "";
       state.isLogin = isLogin;
     },
 
@@ -93,8 +95,8 @@ export default createStore({
           {
             params: {
               q: searchQuery ? String(searchQuery) : "programming",
-
-              startIndex: currentPage * 20,
+              startIndex:
+                currentPage === 1 ? currentPage : (currentPage - 1) * 13 + 1,
               maxResults: 15,
               key: apiKey,
             },

@@ -44,7 +44,7 @@ let router = useRouter();
 let username = ref("");
 let usernameError = ref("");
 let disabled = ref(false);
-const usernameRegex = /^[a-zA-Z0-9]{16,}$/;
+const usernameRegex = /^[a-zA-Z]{16,}$/;
 
 // Login funksiyasi
 function loginForm(event) {

@@ -15,7 +15,16 @@
     "vuex": "^4.0.2"
   },
   "devDependencies": {
+    "@testing-library/vue": "^7.0.0",
     "@vitejs/plugin-vue": "^4.3.4",
-    "vite": "^4.4.9"
-  }
+    "@vue/test-utils": "^2.4.0-alpha.2",
+    "happy-dom": "^12.1.2",
+    "vite": "^4.4.9",
+    "vitest": "^0.34.4"
+  },
+  "description": "This template should help get you started developing with Vue 3 in Vite.",
+  "main": "vite.config.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }
