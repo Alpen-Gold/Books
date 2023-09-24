@@ -11,4 +11,14 @@ export default defineConfig({
       "@": fileURLToPath(new URL("./src", import.meta.url)),
     },
   },
+
+  test: {
+    coverage: {
+      provider: "istanbul",
+      enabled: true,
+    },
+    reporters: ["html"],
+    globals: true,
+    environment: "jsdom",
+  },
 });

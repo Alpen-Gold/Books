@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import BooksView from "../views/BooksView.vue";
 import LoginView from "../views/LoginView.vue";
-import BookDetail from "../components/BookDetail.vue";
+import BookDetail from "../views/BookDetailView.vue";
 import store from "../stores";
 import NotFoundView from "../views/NotFoundView.vue";
 

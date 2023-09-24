@@ -3,11 +3,11 @@
   <div class="login_page">
     <div class="login">
       <div class="logo">
-        <img src="../img/Logo1.png" alt="logo" />
+        <img src="../img/Logo1.png" alt="logo" data-test-img-logo />
         <h3>Xush Kelibsiz !</h3>
         <span>Raqamli kutubxonangizni davom ettirish uchun tizimga kiring</span>
       </div>
-      <form @submit="loginForm" class="form">
+      <form @submit="loginForm" class="form" data-test-form>
         <!-- Foydalanuvchi nomini kiritish maydoni -->
         <input
           type="text"
@@ -15,6 +15,7 @@
           v-model="username"
           placeholder="Username . . ."
           class="search-input"
+          data-test-input-token
         />
 
         <!-- Xatolik xabari -->
@@ -23,7 +24,12 @@
         </div>
 
         <!-- Kirish tugmasi -->
-        <button type="submit" class="all-button btn_login" :disabled="disabled">
+        <button
+          type="submit"
+          class="all-button btn_login"
+          :disabled="disabled"
+          data-test-button-login
+        >
           <span v-if="disabled" class="loader"></span>
           {{ disabled ? "" : "Kirish" }}
         </button>
@@ -35,18 +41,16 @@
 
 <script setup>
 import { ref } from "vue";
-import store from "../stores";
-import { useRouter } from "vue-router";
-import { useStore } from "vuex";
 
-let storeHook = useStore();
-let router = useRouter();
 let username = ref("");
 let usernameError = ref("");
 let disabled = ref(false);
 const usernameRegex = /^[a-zA-Z]{16,}$/;
 
-// Login funksiyasi
+let props = defineProps({
+  ucerInfoAndIsLogin: { type: Function },
+});
+
 function loginForm(event) {
   event.preventDefault();
 
@@ -55,11 +59,7 @@ function loginForm(event) {
     disabled.value = true;
 
     setTimeout(() => {
-      // Foydalanuvchi ma'lumotlari va ro'yxatdan o'tganlikni saqlash
-      storeHook.commit("setUserInfo", username);
-      storeHook.commit("setIsLogin", true);
-      // Kitoblar sahifasiga yo'naltirish
-      router.push("/books");
+      props.ucerInfoAndIsLogin(username);
     }, 3000);
   } else {
     usernameError.value = "Foydalanuvchi nomida xatolik mavjud!";

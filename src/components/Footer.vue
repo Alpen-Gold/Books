@@ -1,5 +1,5 @@
 <template>
-  <footer class="footer">
+  <div id="footer-class">
     <div class="container">
       <div class="row">
         <div class="footer-col">
@@ -41,7 +41,7 @@
         </div>
       </div>
     </div>
-  </footer>
+  </div>
 </template>
 
 <script setup></script>
@@ -68,7 +68,7 @@ body {
 ul {
   list-style: none;
 }
-.footer {
+#footer-class {
   background-color: #24262b;
   padding: 70px 0;
 }

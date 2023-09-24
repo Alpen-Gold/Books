@@ -1,17 +1,17 @@
 <template>
   <!-- Yuklash davomi (isLoading) -->
-  <div v-if="isLoading" class="boxLoading">
+  <div v-if="props.isLoading" class="boxLoading">
     <span class="booksLoader"></span>
   </div>
 
-  <div class="boxError" v-else-if="book === null">
+  <div class="boxError" v-else-if="props.book === null">
     <i class="fa-solid fa-triangle-exclamation"></i>
 
     <p>Bunday Shifa Topilmadi !</p>
   </div>
 
   <!-- Xatolikni ko'rsatish (isError) -->
-  <div v-else-if="isError" class="boxError">
+  <div v-else-if="props.isError" class="boxError">
     <i class="fa-solid fa-triangle-exclamation"></i>
     <p>Xatolik chiqdi !</p>
   </div>
@@ -19,30 +19,33 @@
   <!-- Kitob tavsif va ma'lumotlar (book) -->
   <div class="box-book-cards" v-else>
     <div class="book-cards container">
-      <div class="box-img-book" v-if="book?.volumeInfo?.imageLinks">
-        <img :src="book?.volumeInfo?.imageLinks?.smallThumbnail" alt="None" />
+      <div class="box-img-book" v-if="props.book?.volumeInfo?.imageLinks">
+        <img
+          :src="props.book?.volumeInfo?.imageLinks?.smallThumbnail"
+          alt="None"
+        />
       </div>
       <div class="none-img-book" v-else>
         <p>Rasm mavjud emas!</p>
       </div>
 
       <div class="book-title">
-        <h3>{{ book?.volumeInfo?.title }}</h3>
+        <h3>{{ props.book?.volumeInfo?.title }}</h3>
 
         <p>
           <span class="athors">Yozuvchilar: </span
-          >{{ book?.volumeInfo?.authors?.join(" | ") }}
+          >{{ props.book?.volumeInfo?.authors?.join(" | ") }}
         </p>
 
         <p>
           <span class="athors">Mamlakat: </span
-          >{{ book?.saleInfo?.country || "Mamlakat topilmadi" }}
+          >{{ props.book?.saleInfo?.country || "Mamlakat topilmadi" }}
         </p>
 
         <p>
           <span class="athors">Miqdori: </span
-          >{{ book?.saleInfo?.listPrice?.amount }}
-          {{ book?.saleInfo?.listPrice?.currencyCode || "Miqdori yoq" }}
+          >{{ props.book?.saleInfo?.listPrice?.amount }}
+          {{ props.book?.saleInfo?.listPrice?.currencyCode || "Miqdori yoq" }}
         </p>
 
         <div class="starts">
@@ -54,19 +57,19 @@
         </div>
 
         <div class="box-button-books">
-          <a :href="book?.volumeInfo?.previewLink" target="_blank">
+          <a :href="props.book?.volumeInfo?.previewLink" target="_blank">
             <button class="all-button">
               <i class="fa-solid fa-eye"></i>
             </button>
           </a>
 
-          <a :href="book?.volumeInfo?.infoLink" target="_blank">
+          <a :href="props.book?.volumeInfo?.infoLink" target="_blank">
             <button class="all-button">
               <i class="fa-solid fa-info"></i>
             </button>
           </a>
 
-          <a :href="book?.saleInfo?.buyLink" target="_blank">
+          <a :href="props.book?.saleInfo?.buyLink" target="_blank">
             <button class="all-button">Sotib olish</button>
           </a>
         </div>
@@ -77,7 +80,7 @@
     <div class="box-description container">
       <p>
         <span class="description">Tavsif: </span
-        >{{ book?.volumeInfo?.description || "Tavsif mavjud emas !" }}
+        >{{ props.book?.volumeInfo?.description || "Tavsif mavjud emas !" }}
       </p>
     </div>
 
@@ -85,9 +88,7 @@
     <div class="books">
       <div
         class="wrapper-book"
-        v-for="(similarBook, index) in books.filter(
-          (item) => item.id !== router.currentRoute.value.params.id
-        )"
+        v-for="(similarBook, index) in props.filteredBooks"
         :key="similarBook.id"
       >
         <div class="book-similar">
@@ -98,7 +99,7 @@
             />
           </div>
 
-          <div class="none-img" v-else>
+          <div data-test-book-img class="none-img" v-else>
             <p>Rasm mavjud emas!</p>
           </div>
 
@@ -111,7 +112,13 @@
             <p class="title-lorem-book">{{ similarBook?.volumeInfo?.title }}</p>
 
             <RouterLink :to="{ name: 'book', params: { id: similarBook.id } }">
-              <button class="detail-icon" @click="booksRender">Ko'rish</button>
+              <button
+                @click="booksRender"
+                class="detail-icon"
+                data-test-book-detail
+              >
+                Ko'rish
+              </button>
             </RouterLink>
           </div>
 
@@ -126,40 +133,27 @@
 </template>
 
 <script setup>
-import { onMounted, ref, computed } from "vue";
-import { useRouter } from "vue-router";
-import { useStore } from "vuex";
+import { onMounted } from "vue";
 import FooterCode from "./Footer.vue";
 
-let store = useStore();
-let router = useRouter();
+let props = defineProps({
+  book: { type: Object },
+  books: { type: Array },
+  isLoading: { type: Boolean },
+  isError: { type: Boolean },
+  filteredBooks: { type: Array },
+});
 
-let books = ref([]);
-let book = ref(null);
-let typeNotFount = ref(false);
-let isLoading = computed(() => store.state.isLoading);
-let isError = computed(() => store.state.isError);
+const emit = defineEmits(["booksRenderView", "onMountedView"]);
 
 // Kitoblar ro'yxatini yangilash funktsiyasi
 function booksRender() {
-  store.dispatch("fetchBooks").then(() => {
-    books.value = store.state.books;
-    book.value = books.value.find(
-      (item) => item.id === router.currentRoute.value.params.id
-    );
-    console.log(router.currentRoute.value.params.id);
-  });
+  emit("booksRenderView");
 }
 
 // Komponent yuklandiğida kitoblar ro'yxatini yangilash
 onMounted(async () => {
-  store.dispatch("fetchBooks").then(() => {
-    books.value = store.state.books;
-    book.value = books.value.find(
-      (item) => item.id === router.currentRoute.value.params.id
-    );
-    console.log(router.currentRoute.value.params.id);
-  });
+  emit("onMountedView");
 });
 </script>
 

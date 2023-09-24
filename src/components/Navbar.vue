@@ -1,47 +1,59 @@
 <template>
   <!-- Navbar start -->
-  <nav v-if="$store.state.notFoundView">
+  <nav v-if="props.notFoundView">
     <div class="container">
       <div class="navbar">
         <div>
           <!-- Logo -->
           <RouterLink :to="{ name: 'books' }">
-            <div class="logo">
-              <a href="#"> <img :src="logo" alt="" class="logo" /></a>
+            <div class="logo" id="logo">
+              <a href="#">
+                <img :src="logo" alt="" class="logo" data-test-img
+              /></a>
             </div>
           </RouterLink>
 
           <!-- "Books" button -->
-          <RouterLink v-if="!$store.state.typeViewBook" :to="{ name: 'books' }">
-            <button class="all-button books-home">
-              <i class="fa-solid fa-arrow-left"></i> Kitoblar
-            </button>
-          </RouterLink>
+
+          <div v-if="!props.typeViewBook">
+            <RouterLink :to="{ name: 'books' }" class="test-click">
+              <button
+                class="all-button books-home"
+                id="exit_books"
+                data-test-page-book
+              >
+                <i class="fa-solid fa-arrow-left"></i> Kitoblar
+              </button>
+            </RouterLink>
+          </div>
         </div>
 
         <!-- Search form -->
-        <form class="search" v-if="$store.state.typeViewBook">
+        <form class="search" v-if="props.typeViewBook">
           <input
             type="text"
             placeholder="Search..."
             class="search-input"
+            id="search-input"
             @input="inputHandle"
+            data-test-input-search
           />
-          <button class="all-button" @click="search">
+
+          <button class="all-button" @click="search" id="click-search-btn">
             <i class="fa-solid fa-magnifying-glass"></i>
           </button>
         </form>
 
         <!-- Login / Logout button -->
-        <div class="login">
-          <RouterLink
-            v-if="$store.state.isLogin"
+        <div class="">
+          <button
+            v-if="props.is_Login"
             class="all-button"
             @click="logOut"
-            :to="{ name: 'login' }"
+            data-test-log-out
           >
             <i class="fa-solid fa-arrow-right-from-bracket"></i>
-          </RouterLink>
+          </button>
         </div>
       </div>
     </div>
@@ -52,22 +64,26 @@
 <script setup>
 import logo from "@/img/Logo1.png";
 import { RouterLink } from "vue-router";
-import { useStore } from "vuex";
-let hookStore = useStore();
+
+const emit = defineEmits(["isLogin", "searchQuery", "fetchBooksAndCurrent"]);
+
+let props = defineProps({
+  notFoundView: { type: Boolean },
+  typeViewBook: { type: Boolean },
+  is_Login: { type: Boolean },
+});
 
 function logOut() {
-  hookStore.commit("setIsLogin", false);
+  emit("isLogin");
 }
 
 function inputHandle(value) {
-  hookStore.commit("setSearchQuery", value.target.value);
+  emit("searchQuery", value);
 }
 
 function search(e) {
-  console.log(e);
   e.preventDefault();
-  hookStore.commit("setCurrentPage");
-  hookStore.dispatch("fetchBooks");
+  emit("fetchBooksAndCurrent");
 }
 </script>
 

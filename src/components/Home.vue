@@ -3,19 +3,19 @@
   <div class="container">
     <div class="books">
       <!-- Yuklenmoqda xabari -->
-      <div v-if="isLoading" class="boxLoading">
+      <div v-if="props.storeElements.isLoading" class="boxLoading">
         <span class="booksLoader"></span>
       </div>
 
       <!-- Kitob topilmadi xabari -->
-      <div v-else-if="isNotValue" class="boxError">
+      <div v-else-if="props.storeElements.isNotValue" class="boxError">
         <i class="fa-solid fa-triangle-exclamation"></i>
 
         <p>Kitob Topilmadi !</p>
       </div>
 
       <!-- Xatolik xabari -->
-      <div v-else-if="isError" class="boxError">
+      <div v-else-if="props.storeElements.isError" class="boxError">
         <i class="fa-solid fa-triangle-exclamation"></i>
 
         <p>Xatolik chiqdi !</p>
@@ -25,7 +25,7 @@
       <div
         class="wrapper-book"
         v-else
-        v-for="(book, index) in $store.state.books"
+        v-for="(book, index) in props.books"
         :key="book.id"
       >
         <div class="book">
@@ -63,20 +63,31 @@
     </div>
 
     <!-- Sahifalash tugmalar joyi -->
-    <div v-if="!isError && !isLoading && !isNotValue" class="box-pogination">
+    <div
+      v-if="
+        !props.storeElements.isError &&
+        !props.storeElements.isLoading &&
+        !props.storeElements.isNotValue
+      "
+      class="box-pogination"
+    >
       <button
         @click="prevPage"
-        :disabled="currentPage <= 1"
+        data-test-prevPage
+        :disabled="props.storeElements.currentPage <= 1"
         class="all-button"
-        :class="currentPage <= 1 ? 'd-button' : null"
+        :class="props.storeElements.currentPage <= 1 ? 'd-button' : null"
       >
         Oldingisi
       </button>
-      <span>{{ currentPage }}</span>
+      <span>{{ props.storeElements.currentPage }}</span>
       <button
+        data-test-nextPage
         @click="nextPage"
         class="all-button"
-        :class="currentPage === totalPage"
+        :class="
+          props.storeElements.currentPage === props.storeElements.totalPage
+        "
       >
         Keyingisi
       </button>
@@ -84,40 +95,43 @@
   </div>
 
   <!-- Past yoki ustida bog'lanishi yuqoridagi qismi -->
-  <div v-if="!isError && !isLoading && !isNotValue">
+  <div
+    v-if="
+      !props.storeElements.isError &&
+      !props.storeElements.isLoading &&
+      !props.storeElements.isNotValue
+    "
+  >
     <FooterCode />
   </div>
 </template>
 
 <script setup>
-import { onMounted, ref, computed } from "vue";
+import { onMounted } from "vue";
 import { useStore } from "vuex";
 import FooterCode from "./Footer.vue";
 
-let hookStore = useStore();
+let props = defineProps({
+  storeElements: { type: Object },
+  books: { type: Array },
+});
 
+let emits = defineEmits(["prevPageView", "nextPageView", "mountView"]);
 // Xabarlar va sahifalashni ma'lumotlari
-let isLoading = computed(() => hookStore.state.isLoading);
-let isError = computed(() => hookStore.state.isError);
-let currentPage = computed(() => hookStore.state.currentPage);
-let totalPage = computed(() => hookStore.state.totalPage);
-let isNotValue = computed(() => hookStore.state.isNotValue);
 
 // Oldingi sahifaga o'tish funksiyasi
 function prevPage() {
-  hookStore.commit("prevPage");
-  hookStore.dispatch("fetchBooks");
+  emits("prevPageView");
 }
 
 // Keyingi sahifaga o'tish funksiyasi
 function nextPage() {
-  hookStore.commit("nextPage");
-  hookStore.dispatch("fetchBooks");
+  emits("nextPageView");
 }
 
 // Sahifaning yuklanishida kitoblarni olish
 onMounted(() => {
-  hookStore.dispatch("fetchBooks");
+  emits("mountView");
 });
 </script>
 
